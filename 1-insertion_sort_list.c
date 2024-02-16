@@ -8,17 +8,12 @@
  */
 void insertion_sort_list(listint_t **list)
 {
-	listint_t *current, *node, *tmp;
-	int i, listSize;
+	listint_t *current, *tmp;
+	int j = 1;
 
-	node = *list;
-	while (node)
+	while (j != 0)
 	{
-		listSize++;
-		node = node->next;
-	}
-	while (i <= listSize * 2)
-	{
+		j = 0;
 		current = (*list)->next;
 		while (current)
 		{
@@ -30,16 +25,12 @@ void insertion_sort_list(listint_t **list)
 					current->next->prev = tmp;
 					tmp->next = current->next;
 					current->prev = NULL;
-					tmp->prev = current;
-					current->next = tmp;
 					*list = current;
 				}
 				else if (current->next == NULL)
 				{
 					current->prev = tmp->prev;
 					tmp->prev->next = current;
-					tmp->prev = current;
-					current->next = tmp;
 					tmp->next = NULL;
 				}
 				else
@@ -48,14 +39,14 @@ void insertion_sort_list(listint_t **list)
 					current->next->prev = tmp;
 					tmp->next = current->next;
 					tmp->prev->next = current;
-					tmp->prev = current;
-					current->next = tmp;
 				}
+				tmp->prev = current;
+				current->next = tmp;
 				print_list(*list);
-				break;	
+				j++;
+				break;
 			}
 			current = current->next;
 		}
-		i++;
 	}
 }
