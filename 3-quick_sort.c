@@ -1,41 +1,70 @@
 #include "sort.h"
 
 /**
- * lomuto - Lomuto partitioning scheme for quicksort
- * @arr: array of integers
+ * swap - swap two array index values
+ * @array: array of integers
+ * @a: first index to swap
+ * @b: second index to swap
+ * Return: nothing
+ */
+void swap(int *array, size_t a, size_t b)
+{
+	int tmp;
+
+	tmp = array[a];
+	array[a] = array[b];
+	array[b] = tmp;
+}
+
+/**
+ * lomuto_partition - Lomuto partitioning scheme for quicksort
+ * @array: array of integers
  * @size: size of array
  * @low: moving index starting from lowest index
- * @high moving index starting from highest index
+ * @high: moving index starting from highest index
  * Return: Nothing
  */
-void lomuto(int *arr, size_t size, size_t low, size_t high)
+size_t lomuto_partition(int *array, size_t size, size_t low, size_t high)
 {
-	int pivot, tmp, tmp1;
+	int pivot;
 	size_t i, j;
+
+	pivot = array[high];
+	i = low - 1;
+	for (j = low; j <= high; j++)
+	{
+		if (array[j] < pivot)
+		{
+			i++;
+			swap(array, i, j);
+		}
+	}
+	swap(array, i + 1, high);
+	print_array(array, size);
+	return (i + 1);
+
+}
+
+/**
+ * apply_sort - sort the array
+ * @array: the array of integers
+ * @size: array size
+ * @low: the lowest index of an array partition
+ * @high: the highest index of an array partition
+ * Return: nothing
+ */
+void apply_sort(int *array, size_t size, int low, int high)
+{
+	int piv;
 
 	if (low < high)
 	{
-		pivot = arr[high];
-		j = low - 1;
-		for (i = low; i <= high; i++)
-		{
-			if (arr[i] < pivot)
-			{
-				j++;
-				tmp = arr[i];
-				arr[i] = arr[j];
-				arr[j] = tmp;
-				print_array(arr, size);
-			}
-		}
-		tmp1 = arr[high];
-		arr[high] = arr[j + 1];
-		arr[j + 1] = tmp1;
-
-		lomuto(arr, size, low, j);
-		lomuto(arr, size, j + 2, high);
+		piv = lomuto_partition(array, size, low, high);
+		apply_sort(array, size, low, piv - 1);
+		apply_sort(array, size, piv + 1, high);
 	}
 }
+
 /**
  * quick_sort - sorts an array of integers in ascending order
  * using the Quick sort algorithm
@@ -45,13 +74,12 @@ void lomuto(int *arr, size_t size, size_t low, size_t high)
  */
 void quick_sort(int *array, size_t size)
 {
-	size_t low = 0;
-	size_t high = size - 1;
+	size_t low;
+	size_t high;
 
 	if (size < 2)
-	{
-		print_array(array, size);
 		return;
-	}
-	lomuto(array, size, low, high);
+	low = 0;
+	high = size - 1;
+	apply_sort(array, size, low, high);
 }
