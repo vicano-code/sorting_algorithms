@@ -13,7 +13,7 @@ void selection_sort(int *array, size_t size)
 	int tmp;
 
 	if (size < 2)
-		print_array(array, size);
+		return;
 	else
 	{
 		for (i = 0; i < size; i++)
