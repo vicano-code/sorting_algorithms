@@ -27,14 +27,26 @@ void swap_head(listint_t **list, listint_t *current, listint_t *tmp)
  */
 void swap_tail(listint_t *current, listint_t *tmp)
 {
-	if (current->next == NULL)
-	{
 		tmp->next = NULL;
 		current->prev = tmp->prev;
 		tmp->prev->next = current;
 		tmp->prev = current;
 		current->next = tmp;
-	}
+}
+/**
+ * swap_mid - swap two middle nodes in a list
+ * @current: current node to swap
+ * @tmp: previous node to swap
+ * Return: Nothing
+ */
+void swap_mid(listint_t *current, listint_t *tmp)
+{
+	current->next->prev = tmp;
+	tmp->next = current->next;
+	current->prev = tmp->prev;
+	tmp->prev->next = current;
+	tmp->prev = current;
+	current->next = tmp;
 }
 
 /**
@@ -64,14 +76,7 @@ void insertion_sort_list(listint_t **list)
 				else if (current->next == NULL)
 					swap_tail(current, tmp);
 				else /*swap between middle nodes*/
-				{
-					current->next->prev = tmp;
-					tmp->next = current->next;
-					current->prev = tmp->prev;
-					tmp->prev->next = current;
-					tmp->prev = current;
-					current->next = tmp;
-				}
+					swap_mid(current, tmp);
 				print_list(*list);
 				j++;
 				break;
